@@ -38,28 +38,20 @@ def is_good_sentence(sentence: str) -> bool:
 
     if not sentence:
         return False
-
     if len(sentence) < 40:
         return False
-
     if len(sentence) > 220:
         return False
-
     if sentence.isupper():
         return False
-
     if sentence.count(" ") < 5:
         return False
-
     if uppercase_ratio(sentence) > 0.35:
         return False
-
     if sentence.count('"') > 4:
         return False
-
     if sentence.count("…") > 1:
         return False
-
     if re.search(r"[A-Z]{4,}", sentence):
         return False
 
@@ -97,17 +89,26 @@ def sentence_score(sentence: str, lemma: str) -> int:
     if not sentence.isupper():
         score += 1
 
-    if uppercase_ratio(sentence) < 0.2:
-        score += 2
-
-    if "\n" not in sentence:
-        score += 1
-
-    for pattern in BAD_PATTERNS:
-        if re.search(pattern, sentence, re.IGNORECASE):
-            score -= 5
-
     return score
+
+
+def highlight_lemma_in_sentence(sentence: str, lemma: str) -> str:
+    doc = nlp(sentence)
+
+    highlighted_tokens = []
+
+    for token in doc:
+        if token.lemma_.lower() == lemma.lower() and token.is_alpha:
+            highlighted_tokens.append(f"**{token.text}**")
+        else:
+            highlighted_tokens.append(token.text)
+
+    text = " ".join(highlighted_tokens)
+    text = re.sub(r"\s+([,.;:!?])", r"\1", text)
+    text = re.sub(r"\(\s+", "(", text)
+    text = re.sub(r"\s+\)", ")", text)
+
+    return text.strip()
 
 
 def add_example_sentences(vocab_df: pd.DataFrame, text: str) -> pd.DataFrame:
@@ -159,5 +160,10 @@ def add_example_sentences(vocab_df: pd.DataFrame, text: str) -> pd.DataFrame:
 
     result_df = vocab_df.copy()
     result_df["example_sentence"] = result_df["lemma"].map(selected_sentences)
+    result_df["example_sentence"] = result_df.apply(
+        lambda row: highlight_lemma_in_sentence(row["example_sentence"], row["lemma"])
+        if pd.notna(row["example_sentence"]) else None,
+        axis=1
+    )
 
     return result_df

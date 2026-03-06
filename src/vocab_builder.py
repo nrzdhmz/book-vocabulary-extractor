@@ -13,6 +13,7 @@ CUSTOM_EXCLUDE = {
 }
 
 ALLOWED_POS = {"NOUN", "VERB", "ADJ", "ADV"}
+BAD_ENTITY_TYPES = {"PERSON", "GPE", "LOC", "ORG"}
 
 
 def should_keep_token(token: dict) -> bool:
@@ -25,6 +26,9 @@ def should_keep_token(token: dict) -> bool:
         return False
 
     if lemma in CUSTOM_EXCLUDE:
+        return False
+
+    if token.get("ent_type") in BAD_ENTITY_TYPES:
         return False
 
     if not lemma.isalpha():
@@ -50,13 +54,11 @@ def build_vocabulary(tokens, min_frequency: int = 1) -> pd.DataFrame:
     rows = []
     for (lemma, pos), frequency in counts.items():
         if frequency >= min_frequency:
-            rows.append(
-                {
-                    "lemma": lemma,
-                    "pos": pos,
-                    "frequency": frequency,
-                }
-            )
+            rows.append({
+                "lemma": lemma,
+                "pos": pos,
+                "frequency": frequency,
+            })
 
     df = pd.DataFrame(rows)
 
