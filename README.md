@@ -1,33 +1,17 @@
-PDF
- ↓
-Extract text
- ↓
-Clean text
- ↓
-Tokenize words
- ↓
-Lemmatize words
- ↓
-Remove stopwords
- ↓
-Count word frequencies
- ↓
-Filter useful vocabulary
- ↓
-Add example sentences
- ↓
-Generate vocabulary list
+# Book Vocabulary Extractor
 
+A small NLP project that extracts useful vocabulary from a book (PDF).
 
-| POS   | Meaning                   | Example      |
-| ----- | ------------------------- | ------------ |
-| NOUN  | noun                      | doctor, book |
-| VERB  | verb                      | run, praise  |
-| ADJ   | adjective                 | epic         |
-| ADV   | adverb                    | quickly      |
-| DET   | determiner                | the, a       |
-| ADP   | preposition               | for, of      |
-| CCONJ | coordinating conjunction  | and          |
-| SCONJ | subordinating conjunction | because      |
-| PROPN | proper noun               | London       |
-| AUX   | auxiliary verb            | is, have     |
+## What it does
+- Reads a PDF book
+- Processes the text with spaCy
+- Extracts meaningful words (nouns, verbs, adjectives, adverbs)
+- Ranks vocabulary using frequency and word rarity
+- Finds example sentences from the book
+
+## Current stage
+Prototype built in a notebook.  
+Pipeline: **PDF → text → tokens → vocabulary → examples → ranking**
+
+## Tech
+Python, spaCy, pandas, wordfreq
