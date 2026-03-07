@@ -16,7 +16,3 @@ services:
     envVars:
       - key: PORT
         value: 10000
-    disk:
-      name: outputs
-      mountPath: /home/render/outputs
-      sizeGB: 1
