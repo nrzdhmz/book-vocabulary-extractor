@@ -1,0 +1,10 @@
+{
+  "build": {
+    "buildCommand": "pip install -r requirements.txt"
+  },
+  "deploy": {
+    "startCommand": "uvicorn api.main:app --host 0.0.0.0 --port 10000",
+    "healthcheckPath": "/healthz",
+    "restartPolicyType": "ON_FAILURE"
+  }
+}
