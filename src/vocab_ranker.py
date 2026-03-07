@@ -21,12 +21,21 @@ def compute_rarity_score(lemma: str) -> float:
     if zipf <= 0:
         return 3.0
 
-    rarity = max(0.5, 8.0 - zipf)
+    rarity = max(0.5, 8.0 - zipf) # max zipf score is 8 so rarity decreases as frequency increases
     return rarity
 
 
 def compute_pos_weight(pos: str) -> float:
     return POS_WEIGHTS.get(pos, 1.0)
+
+def classify_difficulty(zipf: float) -> str:
+    if pd.isna(zipf):
+        return "unknown"
+    if zipf >= 5.0:
+        return "easy"
+    if zipf >= 3.5:
+        return "intermediate"
+    return "hard"
 
 
 def rank_vocabulary(vocab_df: pd.DataFrame) -> pd.DataFrame:
@@ -42,6 +51,8 @@ def rank_vocabulary(vocab_df: pd.DataFrame) -> pd.DataFrame:
         * df["rarity_score"]
         * df["pos_weight"]
     )
+
+    df["difficulty"] = df["zipf_frequency"].apply(classify_difficulty)
 
     df = df.sort_values(
         by=["vocab_score", "frequency", "lemma"],

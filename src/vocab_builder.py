@@ -1,3 +1,4 @@
+import re
 from collections import Counter
 import pandas as pd
 
@@ -14,6 +15,7 @@ CUSTOM_EXCLUDE = {
 
 ALLOWED_POS = {"NOUN", "VERB", "ADJ", "ADV"}
 BAD_ENTITY_TYPES = {"PERSON", "GPE", "LOC", "ORG"}
+ASCII_WORD = re.compile(r"^[A-Za-z]+$")
 
 
 def should_keep_token(token: dict) -> bool:
@@ -25,13 +27,16 @@ def should_keep_token(token: dict) -> bool:
     if token["pos"] not in ALLOWED_POS:
         return False
 
-    if lemma in CUSTOM_EXCLUDE:
+    if lemma in CUSTOM_EXCLUDE: 
         return False
 
     if token.get("ent_type") in BAD_ENTITY_TYPES:
         return False
 
-    if not lemma.isalpha():
+    if not lemma.isascii():
+        return False
+
+    if not ASCII_WORD.match(lemma):
         return False
 
     if len(lemma) < 3 or len(lemma) > 20:

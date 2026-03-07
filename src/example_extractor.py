@@ -27,7 +27,7 @@ def clean_sentence_text(sentence: str) -> str:
 
 def uppercase_ratio(text: str) -> float:
     letters = [ch for ch in text if ch.isalpha()]
-    if not letters:
+    if not letters:                                    # to prevent zero division | upper/len(letters) -> Zero division error | 
         return 0.0
     upper = sum(1 for ch in letters if ch.isupper())
     return upper / len(letters)
@@ -144,6 +144,7 @@ def add_example_sentences(vocab_df: pd.DataFrame, text: str) -> pd.DataFrame:
                 lemma_good_sentences.setdefault(lemma, []).append(sentence_text)
 
     selected_sentences = {}
+    sentence_source = {}
 
     for lemma in vocab_df["lemma"]:
         good_candidates = lemma_good_sentences.get(lemma, [])
@@ -151,10 +152,13 @@ def add_example_sentences(vocab_df: pd.DataFrame, text: str) -> pd.DataFrame:
 
         if good_candidates:
             best_sentence = max(good_candidates, key=lambda s: sentence_score(s, lemma))
+            sentence_source[lemma] = "good"
         elif all_candidates:
             best_sentence = max(all_candidates, key=lambda s: sentence_score(s, lemma))
+            sentence_source[lemma] = "fallback"
         else:
             best_sentence = None
+            sentence_source[lemma] = "missing"
 
         selected_sentences[lemma] = best_sentence
 
@@ -165,5 +169,6 @@ def add_example_sentences(vocab_df: pd.DataFrame, text: str) -> pd.DataFrame:
         if pd.notna(row["example_sentence"]) else None,
         axis=1
     )
+    result_df["example_source"] = result_df["lemma"].map(sentence_source)
 
     return result_df
