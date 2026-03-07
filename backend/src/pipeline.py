@@ -51,7 +51,8 @@ def run_pipeline(
         ranked, out_dir=output_dir, base_name=base_name
     )
     combined_path = Path(output_dir) / f"{base_name}.csv"
-    ranked.to_csv(combined_path, index=False)
+    combined_cols = [c for c in priority_cols if c in ranked.columns]
+    ranked[combined_cols].to_csv(combined_path, index=False)
     saved_paths["combined"] = combined_path
 
     duration = time.perf_counter() - start

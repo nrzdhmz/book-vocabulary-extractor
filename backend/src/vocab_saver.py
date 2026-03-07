@@ -18,9 +18,9 @@ def save_vocab_by_difficulty(
 
     def _save(df: pd.DataFrame, suffix: str):
         path = out_dir / f"{base_name}_{suffix}.csv"
-        # Reorder columns: lemma, pos, definition, example_sentence, then the rest.
+        # Persist only the user-facing columns in a fixed order.
         priority = ["lemma", "pos", "definition", "example_sentence"]
-        cols = priority + [c for c in df.columns if c not in priority]
+        cols = [c for c in priority if c in df.columns]
         df[cols].to_csv(path, index=False)
         saved[suffix] = path
 
