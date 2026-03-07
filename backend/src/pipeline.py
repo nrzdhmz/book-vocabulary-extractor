@@ -42,6 +42,9 @@ def run_pipeline(
     vocab_examples = add_example_sentences(vocab_df, text)
     ranked = rank_vocabulary(vocab_examples)
     ranked = add_definitions(ranked)
+    priority_cols = ["lemma", "pos", "definition", "example_sentence"]
+    remaining_cols = [c for c in ranked.columns if c not in priority_cols]
+    ranked = ranked[priority_cols + remaining_cols]
 
     # CSVs
     saved_paths = save_vocab_by_difficulty(
