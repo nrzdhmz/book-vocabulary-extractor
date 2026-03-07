@@ -81,18 +81,21 @@ cd backend
 pytest
 ```
 
-## Deploy (quick guide)
+## Run locally (backend)
+```
+cd backend
+python -m venv .venv
+source .venv/bin/activate   # Windows: .venv\Scripts\activate
+pip install -r requirements.txt
+uvicorn api.main:app --host 0.0.0.0 --port 8000
+```
+Health check: http://localhost:8000/healthz
 
-### Backend (Render, free)
-1. Push this repo to GitHub.
-2. In Render, choose **Blueprint** and point to this repo; it will read `render.yaml`.
-3. Deploy the `book-vocabulary-backend` web service (auto start command: `uvicorn api.main:app --port 10000`).
-4. Note the deployed URL, e.g., `https://your-backend.onrender.com`.
-
-### Frontend (GitHub Pages via Actions)
-1. In your repo settings → Secrets → Actions, add `VITE_API_BASE` with the backend URL.
-2. Push to `main/master`; the workflow `.github/workflows/frontend-pages.yml` builds `frontend` and publishes to `gh-pages`.
-3. In GitHub Settings → Pages, select branch `gh-pages`, folder `/` as the source.
-4. Your site will be at `https://<username>.github.io/<repo>/` and will call the backend via `VITE_API_BASE`.
-
-Frontend build uses `frontend/.env.production.example` as a template; the actual URL is injected from the action secret.
+## Run locally (frontend)
+```
+cd frontend
+npm install
+echo "VITE_API_BASE=http://localhost:8000" > .env.local
+npm run dev
+```
+Open the printed Vite URL (default http://localhost:5173), upload a text-based PDF, and download the CSVs.
