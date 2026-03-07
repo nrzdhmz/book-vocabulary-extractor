@@ -80,3 +80,19 @@ Open `notebooks/main.ipynb`. It already adds `../backend` to `sys.path` and save
 cd backend
 pytest
 ```
+
+## Deploy (quick guide)
+
+### Backend (Render, free)
+1. Push this repo to GitHub.
+2. In Render, choose **Blueprint** and point to this repo; it will read `render.yaml`.
+3. Deploy the `book-vocabulary-backend` web service (auto start command: `uvicorn api.main:app --port 10000`).
+4. Note the deployed URL, e.g., `https://your-backend.onrender.com`.
+
+### Frontend (GitHub Pages via Actions)
+1. In your repo settings → Secrets → Actions, add `VITE_API_BASE` with the backend URL.
+2. Push to `main/master`; the workflow `.github/workflows/frontend-pages.yml` builds `frontend` and publishes to `gh-pages`.
+3. In GitHub Settings → Pages, select branch `gh-pages`, folder `/` as the source.
+4. Your site will be at `https://<username>.github.io/<repo>/` and will call the backend via `VITE_API_BASE`.
+
+Frontend build uses `frontend/.env.production.example` as a template; the actual URL is injected from the action secret.
