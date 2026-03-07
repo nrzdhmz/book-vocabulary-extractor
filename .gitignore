@@ -1,33 +1,27 @@
-# Python
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
-*.py[cod]
-
-# Virtual environments
-.venv/
-venv/
-env/
-
-# Jupyter
-.ipynb_checkpoints/
-
-# MacOS
+# OS junk
 .DS_Store
+Thumbs.db
 
-# Data files
-data/raw/
-data/processed/
+# Python / backend
+backend/.venv/
+backend/__pycache__/
+backend/**/__pycache__/
+backend/.pytest_cache/
+backend/.ipynb_checkpoints/
+backend/uploads/
+backend/outputs/*.csv
+backend/outputs/*.json
+!backend/outputs/.gitkeep
+backend/data/*.pdf
+!backend/data/.gitkeep
 
-# Output files
-outputs/
+# Node / frontend
+frontend/node_modules/
+frontend/dist/
+frontend/.env
+frontend/.env.local
+frontend/.env.*.local
 
-# Logs
-*.log
-
-# VS Code
+# Editor
 .vscode/
-
-# Environment variables
-.env
+.idea/

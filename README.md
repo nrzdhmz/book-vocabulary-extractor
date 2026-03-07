@@ -33,28 +33,50 @@ The pipeline processes a book in several stages:
 7. **Definitions**  
    Definitions are added using **WordNet (NLTK)**.
 
-## Output
+## Current Layout
+```
+backend/
+  src/                # all processing modules
+  data/raw/book.pdf   # sample input
+  outputs/            # generated CSVs
+  cli.py              # command-line runner
+  requirements.txt
+  tests/
+notebooks/
+  main.ipynb          # exploratory notebook using backend modules
+frontend/             # (placeholder for your UI)
+```
 
-The pipeline exports CSV files containing vocabulary data:
-
+## Outputs
+Written to `backend/outputs/`:
 - `ranked_vocabulary_all.csv`
 - `ranked_vocabulary_easy.csv`
 - `ranked_vocabulary_intermediate.csv`
 - `ranked_vocabulary_hard.csv`
+- `ranked_vocabulary.csv` (combined)
+- `ranked_vocabulary_metadata.json` (run parameters + counts)
 
-Each entry includes:
-- lemma
-- part of speech
-- frequency
-- example sentence
-- difficulty level
-- definition
+Each row includes lemma, POS, frequency, difficulty, definition, and an in-book example sentence.
 
-## Tech Stack
+## Run via CLI
+```
+cd backend
+python cli.py --pdf data/raw/book.pdf --min-frequency 2 --out outputs --base-name ranked_vocabulary
+```
+Avoid scanned PDFs; text-based PDFs work best.
 
-- Python
-- spaCy
-- PyMuPDF
-- pandas
-- wordfreq
-- NLTK
+## Run API (for frontend)
+```
+cd backend
+uvicorn api.main:app --reload --port 8000
+```
+The endpoint `POST /api/extract` accepts a PDF file (`file`) and `min_frequency` form field, returning `summary` and base64 CSVs (all/easy/intermediate/hard). Enable CORS for local dev (Vite default port 5173).
+
+## Notebook
+Open `notebooks/main.ipynb`. It already adds `../backend` to `sys.path` and saves to `../backend/outputs/`.
+
+## Testing
+```
+cd backend
+pytest
+```

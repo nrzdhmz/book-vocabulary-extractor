@@ -34,6 +34,9 @@ fqdn==1.5.1
 ftfy==6.3.1
 wordfreq==3.1.1
 pytest==8.1.1
+fastapi==0.110.0
+h11==0.16.0
+uvicorn==0.27.1
 h11==0.16.0
 httpcore==1.0.9
 httpx==0.28.1
