@@ -11,7 +11,7 @@ def test_build_vocabulary_filters_and_counts():
     tokens = [
         {"lemma": "apple", "pos": "NOUN", "is_stop": False, "ent_type": "", "is_title": False},
         {"lemma": "apple", "pos": "NOUN", "is_stop": False, "ent_type": "", "is_title": False},
-        {"lemma": "123", "pos": "NOUN", "is_stop": False, "ent_type": "", "is_title": False},  # should drop
+        {"lemma": "123", "pos": "NOUN", "is_stop": False, "ent_type": "", "is_title": False},  
         {"lemma": "run", "pos": "VERB", "is_stop": False, "ent_type": "", "is_title": False},
         {"lemma": "run", "pos": "VERB", "is_stop": False, "ent_type": "", "is_title": False},
     ]

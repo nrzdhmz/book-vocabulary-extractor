@@ -1,7 +1,13 @@
 import re
 import spacy
+from spacy.cli import download
 
-nlp = spacy.load("en_core_web_sm")
+try:
+    nlp = spacy.load("en_core_web_sm")
+except OSError:
+    download("en_core_web_sm")
+    nlp = spacy.load("en_core_web_sm")
+
 ASCII_WORD = re.compile(r"^[A-Za-z]+$")
 
 
@@ -14,7 +20,7 @@ def process_text(text: str):
         if not token.is_alpha:
             continue
 
-        # Keep only pure English alphabet (A–Z) words to avoid odd glyphs.
+        # Keep only pure English alphabet (A–Z) words to avoid odd spacy bugs.
         if not token.text.isascii() or not token.lemma_.isascii():
             continue
         if not ASCII_WORD.match(token.text):

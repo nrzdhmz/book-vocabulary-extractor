@@ -11,7 +11,6 @@ POS_MAP = {
     "ADV": wn.ADV,
 }
 
-
 def get_wordnet_definition(lemma: str, pos: str) -> str | None:
     wn_pos = POS_MAP.get(pos)
 
